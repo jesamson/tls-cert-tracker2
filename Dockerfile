@@ -9,8 +9,6 @@ RUN pnpm install --force
 FROM node:20 AS builder
 WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@8.15.4 --activate
-ARG RESEND_API_KEY
-ENV RESEND_API_KEY=${RESEND_API_KEY}
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY . .
@@ -22,7 +20,6 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@8.15.4 --activate
 ENV NODE_ENV=production
 ENV PORT=3000
-ENV RESEND_API_KEY=${RESEND_API_KEY}
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
